@@ -5,7 +5,7 @@ import (
 	"github.com/hashicorp/vault/builtin/credential/aws"
 )
 
-func GetVaultTokenForEC2(vaultAddr string, vaultRole string) (auth *api.SecretAuth, err error) {
+func VaultEC2Login(vaultAddr string, vaultRole string) (auth *api.SecretAuth, err error) {
 	loginData := make(map[string]interface{})
 	loginData, err = awsauth.GenerateLoginData(nil, "", "us-east-1")
 	if err != nil {
