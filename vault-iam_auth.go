@@ -5,7 +5,7 @@ import (
 	"github.com/hashicorp/vault/builtin/credential/aws"
 )
 
-func VaultEC2Login(vaultAddr string, vaultRole string) (auth *api.SecretAuth, err error) {
+func VaultEC2Login(vaultAddr string, vaultRole string) (secret *api.Secret, err error) {
 	loginData := make(map[string]interface{})
 	loginData, err = awsauth.GenerateLoginData(nil, "", "us-east-1")
 	if err != nil {
@@ -17,11 +17,10 @@ func VaultEC2Login(vaultAddr string, vaultRole string) (auth *api.SecretAuth, er
 	if err != nil {
 		return
 	}
-	secret, err := client.Logical().Write("auth/aws/login", loginData)
+	secret, err = client.Logical().Write("auth/aws/login", loginData)
 	if err != nil {
 		return
 	}
 
-	auth = secret.Auth
 	return
 }
