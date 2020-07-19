@@ -5,7 +5,24 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/hashicorp/vault/api"
 	"github.com/hashicorp/vault/builtin/credential/aws"
+	"strings"
 )
+
+func VaultGithubLogin(vaultAddr string, githubToken string) (secret *api.Secret, err error) {
+	loginData := make(map[string]interface{})
+	loginData["token"] = strings.TrimSpace(githubToken)
+
+	client, err := api.NewClient(&api.Config{Address: vaultAddr})
+	if err != nil {
+		return
+	}
+	secret, err = client.Logical().Write("auth/github/login", loginData)
+	if err != nil {
+		return
+	}
+
+	return
+}
 
 func VaultEC2Login(vaultAddr string, vaultRole string) (secret *api.Secret, err error) {
 	loginData := make(map[string]interface{})
